@@ -1,0 +1,17 @@
+{
+    "name": "alireza/karocamp-mvc",
+    "authors": [
+        {
+            "name": "alireza",
+            "email": "alireza.salehi13810102@gmail.com"
+        }
+    ],
+    "require": {
+
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\" : "src"
+        }
+    }
+}
