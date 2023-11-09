@@ -18,7 +18,8 @@ $app->router->get('/register',[AuthController::class,'registerView']);
 $app->router->post('/register',[AuthController::class,'registerPost']);
 
 
-$app->router->get('/user',[UserController::class,'index']);
+$app->router->get('/user/delete',[UserController::class,'delete']);
+
 
 
 
