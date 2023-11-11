@@ -8,6 +8,10 @@
         <label >Phone</label>
         <input type="text" class="form-control"  placeholder="Phone number" name="phone">
     </div>
+    <div class="form-group">
+        <label >Password</label>
+        <input type="password" class="form-control"  placeholder="Password" name="password">
+    </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

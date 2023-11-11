@@ -43,6 +43,7 @@ class MySQLConnection implements DatabaseConnectionInterface,DatabaseOperationIn
         $dsn = "mysql:host=localhost;dbname=todo_app";
         $dbConnect = new \PDO($dsn,"alireza",'alireza369369');
         $dbConnect->setAttribute(\PDO::ATTR_ERRMODE,\PDO::ERRMODE_EXCEPTION);
+        $dbConnect->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE,\PDO::FETCH_ASSOC);
         $this->connection = $dbConnect;
     }
 
@@ -74,7 +75,6 @@ class MySQLConnection implements DatabaseConnectionInterface,DatabaseOperationIn
     public function where(array $where = [], string $operator= "AND"): MySQLConnection
     {
         $sql = " WHERE ";
-
         $whereSql = [];
         $wherePlaceHolders = [];
         foreach ($where as $column => $value){
@@ -103,7 +103,12 @@ class MySQLConnection implements DatabaseConnectionInterface,DatabaseOperationIn
         $sql = "insert into $this->table ($columns) VALUES($values)";
         $preparedStmt = $this->connection->prepare($sql);
         // bind params of insert statement
-        return $preparedStmt->execute($valuesPlaceHolders);
+        try {
+            return $preparedStmt->execute($valuesPlaceHolders);
+        } catch (\Exception $e) {
+
+            return false;
+        }
     }
 
     public function update(array $data): bool
