@@ -9,6 +9,8 @@ use App\View;
 
 require_once dirname(__DIR__)."/vendor/autoload.php";
 
+session_start();
+
 $basePath = dirname(__DIR__);
 $app = new App($basePath);
 
@@ -21,7 +23,10 @@ $app->router->post('/register',[AuthController::class,'registerPost']);
 $app->router->get('/login',[AuthController::class,'loginView']);
 $app->router->post('/login',[AuthController::class,'loginPost']);
 
+$app->router->get('/logout',[AuthController::class,'logout']);
+
 $app->router->get('/tasks',[TaskController::class,'index']);
+$app->router->post('/tasks',[TaskController::class,'createTask']);
 
 
 $app->router->get('/user/delete',[UserController::class,'delete']);
