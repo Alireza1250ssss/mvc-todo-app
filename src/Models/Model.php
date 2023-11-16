@@ -19,9 +19,14 @@ abstract class Model
         return $this->connection->where($where)->delete();
     }
 
-    public function create(array $data): bool
+    public function create(array $data): bool|Model
     {
-        return $this->connection->insert($data);
+        $result =  $this->connection->insert($data);
+        if (!$result)
+            return false;
+
+        $lastInsertedId = $this->connection->lastInsertedId();
+        return (new static())->where('id', $lastInsertedId)->get()[0] ?? false;
     }
 
     public function update(array $data,array $where = []): bool

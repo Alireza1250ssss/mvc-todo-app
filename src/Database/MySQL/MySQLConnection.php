@@ -154,4 +154,9 @@ class MySQLConnection implements DatabaseConnectionInterface,DatabaseOperationIn
         $prepareStmt->execute($this->wherePlaceholder);
         return $prepareStmt->fetchAll();
     }
+
+    public function lastInsertedId()
+    {
+        return $this->connection->lastInsertId();
+    }
 }
