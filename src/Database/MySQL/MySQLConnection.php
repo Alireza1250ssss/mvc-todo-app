@@ -27,7 +27,7 @@ class MySQLConnection implements DatabaseConnectionInterface,DatabaseOperationIn
     /** stores the Where part of mysql query
      * @var string
      */
-    protected $where;
+    protected $where = '';
 
     /** stores the bind params of where clause to use in execute method of prepare statements
      * @var array
@@ -74,7 +74,7 @@ class MySQLConnection implements DatabaseConnectionInterface,DatabaseOperationIn
 
     public function where(array $where = [], string $operator= "AND"): MySQLConnection
     {
-        $sql = " WHERE ";
+        $sql = empty($this->where) ? " WHERE " : " AND ";
         $whereSql = [];
         $wherePlaceHolders = [];
         foreach ($where as $column => $value){
@@ -84,7 +84,7 @@ class MySQLConnection implements DatabaseConnectionInterface,DatabaseOperationIn
         $whereSql = implode(" $operator ", $whereSql);
 
         $sql .= $whereSql;
-        $this->where = $sql;
+        $this->where .= $sql;
         $this->wherePlaceholder = $wherePlaceHolders;
         return $this;
     }
@@ -140,6 +140,7 @@ class MySQLConnection implements DatabaseConnectionInterface,DatabaseOperationIn
         if(!empty($this->where))
             $sql .= $this->where;
         $prepareStmt = $this->connection->prepare($sql);
+        customDump($sql,$this->wherePlaceholder); exit;
         // bind params of where clause (if there is no where constraint it is an empty array and no problem will occur)
         return $prepareStmt->execute($this->wherePlaceholder);
     }
