@@ -3,27 +3,14 @@ namespace App\Controllers;
 
 use App\Models\User;
 use App\Request;
+use App\Session;
 use App\View;
 
 class AuthController {
     public function registerView()
     {
-        if(!empty($_COOKIE['login-todo-app'])){
-            $dataArray = $_COOKIE['login-todo-app'];
-            $dataArray = json_decode($dataArray,true);
-            $phone = $dataArray['phone'];
-            $password = $dataArray['password'];
-            $user = new User();
-            $user = $user->where('phone', $phone)->where('password', $password)
-                ->get();
-            if($user){
-                setcookie("login-todo-app",
-                    json_encode(['phone' => $phone , 'password' => $password]),
-                    time() + 3600
-                );
-                redirect('/tasks');
-            }
-
+        if($user = Session::get('user')){
+            redirect('/tasks');
         }
         View::render('footer','register',[]);
     }
@@ -35,13 +22,9 @@ class AuthController {
          $data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
 
         $user = new User();
-        $result = $user->create($data);
-        if($result){
-            $_SESSION['user'] = [
-                'full_name' => $data['full_name'],
-                'phone' => $data['phone'],
-            ];
-            $_SESSION['logged_in_time'] = time();
+        $user = $user->create($data);
+        if($user){
+            Session::set('user',$user) ;
             redirect('/tasks');
         }
         else
@@ -50,22 +33,8 @@ class AuthController {
 
     public function loginView()
     {
-        if(!empty($_COOKIE['login-todo-app'])){
-            $dataArray = $_COOKIE['login-todo-app'];
-            $dataArray = json_decode($dataArray,true);
-            $phone = $dataArray['phone'];
-            $password = $dataArray['password'];
-            $user = new User();
-            $user = $user->where('phone', $phone)->where('password', $password)
-                ->get();
-            if($user){
-                setcookie("login-todo-app",
-                    json_encode(['phone' => $phone , 'password' => $password]),
-                    time() + 3600
-                );
-                redirect('/tasks');
-            }
-
+        if($user = Session::get('user')){
+            redirect('/tasks');
         }
         echo View::renderView('login');
     }
@@ -81,13 +50,8 @@ class AuthController {
         $hashedPassword = password_hash($password,PASSWORD_DEFAULT);
 
         if($user && password_verify($password,$user[0]['password'])){
-//            setcookie("login-todo-app",
-//                json_encode(['phone' => $phone , 'password' => $password]),
-//               time() + 3600
-//            );
-            $_SESSION['user'] = $user[0];
-            $_SESSION['user']['id'];
-            $_SESSION['logged_in_time'] = time();
+            Session::set('user',$user[0]);
+//            $_SESSION['user'] = $user[0];
             redirect('/tasks');
         }
 
