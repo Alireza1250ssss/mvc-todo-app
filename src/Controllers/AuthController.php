@@ -32,10 +32,18 @@ class AuthController {
     {
         $data = Request::postData();
 
+         $data['password'] = password_hash($data['password'],PASSWORD_DEFAULT);
+
         $user = new User();
         $result = $user->create($data);
-        if($result)
-            header('Location: http://127.0.0.1:8081/tasks');
+        if($result){
+            $_SESSION['user'] = [
+                'full_name' => $data['full_name'],
+                'phone' => $data['phone'],
+            ];
+            $_SESSION['logged_in_time'] = time();
+            redirect('/tasks');
+        }
         else
             View::render('main','error',['message' => 'authentication failed']);
     }
@@ -69,17 +77,29 @@ class AuthController {
         $password = $data['password'];
 
         $user = new User();
-        $user = $user->where('phone', $phone)->where('password', $password)
-            ->get();
-        if($user){
-            setcookie("login-todo-app",
-                json_encode(['phone' => $phone , 'password' => $password]),
-               time() + 3600
-            );
+        $user = $user->where('phone', $phone)->get();
+        $hashedPassword = password_hash($password,PASSWORD_DEFAULT);
+
+        if($user && password_verify($password,$user[0]['password'])){
+//            setcookie("login-todo-app",
+//                json_encode(['phone' => $phone , 'password' => $password]),
+//               time() + 3600
+//            );
+            $_SESSION['user'] = $user[0];
+            $_SESSION['user']['id'];
+            $_SESSION['logged_in_time'] = time();
             redirect('/tasks');
         }
 
         else
             View::render('main','error',['message' => 'authentication failed']);
+    }
+
+    public function logout()
+    {
+        session_destroy();
+        session_regenerate_id();
+//        setcookie("login-todo-app", null,time() - 3600);
+        redirect('/login');
     }
 }

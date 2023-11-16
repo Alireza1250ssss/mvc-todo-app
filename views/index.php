@@ -1,17 +1,24 @@
-<section class="vh-100" style="background-color: #eee;">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
+<section class=" my-3" style="background-color: #eee;">
+    <div class="container py-5 ">
+        <div class="row d-flex justify-content-center align-items-center ">
             <div class="col col-lg-9 col-xl-7">
+
                 <div class="card rounded-3">
                     <div class="card-body p-4">
-                        <h3><?php echo "hello " . $fullName ?? 'welcome !' ?></h3>
+                        <h3><?= "hello " . ($_SESSION['user']['full_name'] ?? 'welcome !') ?></h3>
                         <h4 class="text-center my-3 pb-3">To Do App</h4>
-
-                        <form class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2">
+                        <?php if (!empty($_SESSION['user'])){
+                        ?>
+                        <form action="/tasks" method="post" enctype="multipart/form"
+                                class=" flex-column row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2">
                             <div class="col-12">
                                 <div class="form-outline">
-                                    <input type="text" id="form1" class="form-control" />
+                                    <input type="text" name="title" class="form-control" />
                                     <label class="form-label" for="form1">Enter a task here</label>
+                                </div>
+                                <div class="form-outline">
+                                    <input type="text" name="label" class="form-control" />
+                                    <label class="form-label" for="form1">Enter a task Label</label>
                                 </div>
                             </div>
 
@@ -23,7 +30,9 @@
                                 <button type="submit" class="btn btn-warning">Get tasks</button>
                             </div>
                         </form>
-
+                        <?php } else {?>
+                           <h5 class="text-info text-center"> Log in to create task</h5>
+                        <?php } ?>
                         <table class="table mb-4">
                             <thead>
                             <tr>

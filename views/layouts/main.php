@@ -10,7 +10,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav w-100">
                 <li class="nav-item active">
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
@@ -23,6 +23,15 @@
                 <li class="nav-item ml-auto">
                     <a class="nav-link ml-auto" href="#"><?php echo $name; ?></a>
                 </li>
+                <?php if(!empty($_SESSION['user'])) : ?>
+                <li class="nav-item ms-auto">
+                    <a class="nav-link ml-auto" href="/logout">Logout</a>
+                </li>
+               <?php else : ?>
+                <li class="nav-item ms-auto">
+                    <a class="nav-link ml-auto" href="/login">Login</a>
+                </li>
+                <?php endif;  ?>
             </ul>
         </div>
     </nav>
