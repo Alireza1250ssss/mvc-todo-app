@@ -140,7 +140,6 @@ class MySQLConnection implements DatabaseConnectionInterface,DatabaseOperationIn
         if(!empty($this->where))
             $sql .= $this->where;
         $prepareStmt = $this->connection->prepare($sql);
-        customDump($sql,$this->wherePlaceholder); exit;
         // bind params of where clause (if there is no where constraint it is an empty array and no problem will occur)
         return $prepareStmt->execute($this->wherePlaceholder);
     }

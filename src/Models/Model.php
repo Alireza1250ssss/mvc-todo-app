@@ -14,12 +14,12 @@ abstract class Model
         $this->connection->setTable($this->table);
     }
 
-    public function delete(array $where=[]): bool
+    public function delete(): bool
     {
-        return $this->connection->where($where)->delete();
+        return $this->connection->delete();
     }
 
-    public function create(array $data): bool|Model
+    public function create(array $data): bool|array
     {
         $result =  $this->connection->insert($data);
         if (!$result)
