@@ -42,4 +42,26 @@ class TaskController
         else
             View::render('main','error',['message' => 'task delete failed']);
     }
+
+    public function editPage()
+    {
+        $id = Request::getData()['task_id'];
+        $task = new Task();
+        $task = $task->where('id',$id)->get()[0];
+        View::render('main','tasks/edit',compact('task'));
+    }
+
+    public function update()
+    {
+        $data = Request::postData();
+        $id = $data['task_id'];
+        unset($data['task_id']);
+        $task = new Task();
+        $result= $task->update($data,['id' => $id]);
+        if ($result)
+            redirect('/tasks');
+        else
+            View::render('main','error',['message' => 'task edit failed']);
+
+    }
 }

@@ -26,9 +26,7 @@
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </div>
 
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-warning">Get tasks</button>
-                            </div>
+
                         </form>
                         <?php } else {?>
                            <h5 class="text-info text-center"> Log in to create task</h5>
@@ -49,11 +47,12 @@
                                 <tr>
                                     <th scope="row"><?= $counter ?></th>
                                     <td><?= $task['title'] ?></td>
-                                    <td><?= $task['is_done'] ? "Done" : "Pending" ?></td>
+                                    <td class="<?= $task['is_done'] ? 'bg-success text-white' : '' ?>"
+                                    ><?= $task['is_done'] ? "Done" : "Pending" ?></td>
                                     <td><?= $task['label'] ?? "-" ?></td>
                                     <td>
                                         <a  class="btn btn-danger" href=<?= "/tasks/delete?task_id=" . $task['id'] ?>>Delete</a>
-                                        <button type="submit" class="btn btn-success ms-1">Finished</button>
+                                        <a  class="btn btn-info ms-1" href=<?= "/tasks/edit?task_id=" . $task['id'] ?>>Edit</a>
                                     </td>
                                 </tr>
                             <?php $counter++; ?>
